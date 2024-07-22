@@ -1,0 +1,22 @@
+{
+    "name": "daeris/daerisimber-library",
+    "description": "Library used by daerisimber theme.",
+    "require": {
+        "timber/timber": "^2.2"
+    },
+    "require-dev": {
+        "hellonico/timber-dump-extension": "^2.0",
+        "phlak/config": "^8.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Daeris\\DaerisimberLibrary\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Daeris"
+        }
+    ]
+}
