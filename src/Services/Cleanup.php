@@ -1,6 +1,6 @@
 <?php
 
-namespace DaerisimberLibrary\Services;
+namespace Daeris\DaerisimberLibrary\Services;
 
 class Cleanup
 {

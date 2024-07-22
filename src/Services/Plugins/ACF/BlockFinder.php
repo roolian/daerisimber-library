@@ -1,10 +1,10 @@
 <?php
 
-namespace DaerisimberLibrary\Services\Plugins\ACF;
+namespace Daeris\DaerisimberLibrary\Services\Plugins\ACF;
 
 use ReflectionClass;
-use DaerisimberLibrary\Services\Helper;
-use DaerisimberLibrary\Utils\Traits\SingletonTrait;
+use Daeris\DaerisimberLibrary\Services\Helper;
+use Daeris\DaerisimberLibrary\Utils\Traits\SingletonTrait;
 
 class BlockFinder
 {
