@@ -1,6 +1,7 @@
 {
     "name": "daeris/daerisimber-library",
     "description": "Library used by daerisimber theme.",
+    "type": "library",
     "require": {
         "timber/timber": "^2.2"
     },
