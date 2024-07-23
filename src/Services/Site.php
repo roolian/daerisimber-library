@@ -34,7 +34,7 @@ class Site extends TimberSite
         }
 
         // Require block functions files
-        foreach (glob(__DIR__ . '/blocks/*/functions.php') as $file) {
+        foreach (glob(get_template_directory() . '/blocks/*/functions.php') as $file) {
             require_once $file;
         }
 

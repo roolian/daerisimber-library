@@ -1,5 +1,5 @@
 <?php
-namespace Daerisimber\Utils\Traits;
+namespace Daeris\DaerisimberLibrary\Utils\Traits;
 
 
 
