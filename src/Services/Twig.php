@@ -8,7 +8,10 @@ class Twig
 {
     public function __construct()
     {
+        
+
         add_filter('timber/twig', [$this, 'add_to_twig']);
+        
     }
 
     public function add_to_twig($twig)
