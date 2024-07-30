@@ -2,12 +2,15 @@
 
 namespace Daeris\DaerisimberLibrary\Services;
 
+
+use Daeris\DaerisimberLibrary\Config;
+
 class Cleanup
 {
     public function __construct()
     {
 
-        if (config('cleanup.disable_feeds', true)) {
+        if (Config::get('cleanup.disable_feeds', true)) {
             add_action('do_feed', [$this, 'disableFeed'], 1);
             add_action('do_feed_rdf', [$this, 'disableFeed'], 1);
             add_action('do_feed_rss', [$this, 'disableFeed'], 1);
@@ -18,7 +21,7 @@ class Cleanup
             $this->removeActions();
         }
 
-        if (config('cleanup.disable_comments', true)) {
+        if (Config::get('cleanup.disable_comments', true)) {
             $this->disableComments();
         }
 

@@ -2,6 +2,9 @@
 
 namespace Daeris\DaerisimberLibrary\Services;
 
+
+use Daeris\DaerisimberLibrary\Config;
+
 class Customizer
 {
     public function __construct()
@@ -15,7 +18,7 @@ class Customizer
     {
         $context['logo_url'] = wp_get_attachment_image_url(get_theme_mod('custom_logo'), 'full');
 
-        foreach (config("customizer.customize_register") as $key => $value) {
+        foreach (Config::get("customizer.customize_register") as $key => $value) {
             $context[$key] = get_theme_mod($key);
 
         }
@@ -25,7 +28,7 @@ class Customizer
 
     public function add_fields($wp_customize)
     {
-        foreach (config("customizer.customize_register") as $key => $value) {
+        foreach (Config::get("customizer.customize_register") as $key => $value) {
             $wp_customize->add_setting($key, [
                 'default' => $value['default'],
                 'type' => $value['type'],

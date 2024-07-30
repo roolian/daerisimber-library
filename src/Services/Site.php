@@ -4,13 +4,14 @@ namespace Daeris\DaerisimberLibrary\Services;
 
 use Timber\Timber;
 use Timber\Site as TimberSite;
+use Daeris\DaerisimberLibrary\Config;
 
 class Site extends TimberSite
 {
     public Array $menus = [];
     public function __construct()
     {
-        $this->menus = config('site.menus', []);
+        $this->menus = Config::get('site.menus', []);
 
         add_action('init', [$this, 'register_menus']);
         add_action('after_setup_theme', [$this, 'theme_supports']);
@@ -43,7 +44,7 @@ class Site extends TimberSite
 
     public function theme_supports()
     {
-        foreach (config('site.themes_supports', []) as $key => $value) {
+        foreach (Config::get('site.themes_supports', []) as $key => $value) {
             if(!$value) {
                 continue;
             }
@@ -58,7 +59,7 @@ class Site extends TimberSite
 
     public function allow_file_type_upload($mimes)
     {
-        foreach (config('site.upload_mimes', []) as $key => $value) {
+        foreach (Config::get('site.upload_mimes', []) as $key => $value) {
             return $mimes;
         }
 

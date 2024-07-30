@@ -2,6 +2,9 @@
 
 namespace Daeris\DaerisimberLibrary\Services;
 
+
+use Daeris\DaerisimberLibrary\Config;
+
 class CustomPostTypes
 {
     public function __construct()
@@ -12,7 +15,7 @@ class CustomPostTypes
 
     public function create_custom_types()
     {
-        foreach (config('custom_post_types.post_types', []) as $key => $value) {
+        foreach (Config::get('custom_post_types.post_types', []) as $key => $value) {
             if(!empty($value['auto_labels'])) {
                 $value['labels'] = $this->generateLabels($value);
             }
@@ -20,7 +23,7 @@ class CustomPostTypes
             register_post_type($key, $value);
         }
 
-        foreach (config('custom_post_types.taxonomies', []) as $key => $value) {
+        foreach (Config::get('custom_post_types.taxonomies', []) as $key => $value) {
             if(!empty($value['auto_labels'])) {
                 $value['labels'] = $this->generateLabels($value);
             }
@@ -31,7 +34,7 @@ class CustomPostTypes
 
     public function remove_block_editor($current_status, $post_type)
     {
-        foreach (config('custom_post_types.remove_block_editor', []) as $post_type_slug) {
+        foreach (Config::get('custom_post_types.remove_block_editor', []) as $post_type_slug) {
             if ($post_type === $post_type_slug) {
                 return false;
             }

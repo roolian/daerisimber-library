@@ -6,14 +6,10 @@ use Roots\WPConfig\Config;
 
 class Helper
 {
-    public static function wp_config(string $key): mixed
-    {
-        return Config::get($key);
-    }
 
     public static function is_dev_env(): bool
     {
-        return  in_array(Config::get('WP_ENVIRONMENT_TYPE'), ['development', 'local']);
+        return  in_array(wp_get_environment_type(), ['development', 'local']);
     }
 
     public static function str_to_camel($string)
