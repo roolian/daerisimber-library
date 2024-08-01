@@ -3,11 +3,11 @@
     "description": "Library used by daerisimber theme.",
     "type": "library",
     "require": {
-        "timber/timber": "^2.2"
+        "timber/timber": "^2.2",
+        "phlak/config": "^8.0"
     },
     "require-dev": {
         "hellonico/timber-dump-extension": "^2.0",
-        "phlak/config": "^8.0",
         "symfony/console": "^6.4"
     },
     "license": "MIT",
