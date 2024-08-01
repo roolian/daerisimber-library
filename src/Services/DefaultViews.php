@@ -1,6 +1,6 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Services;
+namespace Daerisimber\Services;
 
 class DefaultViews
 {

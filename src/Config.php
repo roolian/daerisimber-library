@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Daeris\DaerisimberLibrary;
+namespace Daerisimber;
 
-use Daeris\DaerisimberLibrary\Utils\Traits\SingletonTrait;
+use Daerisimber\Utils\Traits\SingletonTrait;
 use PHLAK\Config\Config as ConfigManager;
 
 class Config {

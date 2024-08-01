@@ -1,8 +1,8 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary;
+namespace Daerisimber;
 
-use Daeris\DaerisimberLibrary\Utils\Traits\SingletonTrait;
+use Daerisimber\Utils\Traits\SingletonTrait;
 
 class NestorBoot
 {

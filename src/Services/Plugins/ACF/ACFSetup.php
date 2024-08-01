@@ -1,8 +1,8 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Services\Plugins\ACF;
+namespace Daerisimber\Services\Plugins\ACF;
 
-use Daeris\DaerisimberLibrary\Services\Helper;
+use Daerisimber\Services\Helper;
 
 class ACFSetup
 {

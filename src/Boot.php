@@ -1,9 +1,9 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary;
+namespace Daerisimber;
 
 use Timber\Timber;
-use Daeris\DaerisimberLibrary\Config;
+use Daerisimber\Config;
 
 class Boot
 {

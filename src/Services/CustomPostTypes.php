@@ -1,9 +1,9 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Services;
+namespace Daerisimber\Services;
 
 
-use Daeris\DaerisimberLibrary\Config;
+use Daerisimber\Config;
 
 class CustomPostTypes
 {

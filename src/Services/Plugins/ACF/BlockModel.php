@@ -1,6 +1,6 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Services\Plugins\ACF;
+namespace Daerisimber\Services\Plugins\ACF;
 
 use Timber\Timber;
 

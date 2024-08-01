@@ -1,10 +1,10 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Services;
+namespace Daerisimber\Services;
 
 use Timber\Timber;
 use Timber\Site as TimberSite;
-use Daeris\DaerisimberLibrary\Config;
+use Daerisimber\Config;
 
 class Site extends TimberSite
 {
