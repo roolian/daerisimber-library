@@ -1,6 +1,6 @@
 <?php
 
-namespace Daeris\DaerisimberLibrary\Console;
+namespace Daerisimber\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ViewPublishCommand extends Command
 {
-    public $base_path = ROOT_THEME_DIR . '/vendor/daeris/daerisimber-library/views';
+    public $base_path = ROOT_THEME_DIR . '/vendor/daerisimber/library/views';
 
     public function rsearch($folder, $regPattern)
     {
