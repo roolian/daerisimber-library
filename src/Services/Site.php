@@ -57,11 +57,12 @@ class Site extends TimberSite
 
     }
 
-    public function allow_file_type_upload($mimes)
+    public function allow_file_type_upload($mime_types)
     {
-        foreach (Config::get('site.upload_mimes', []) as $key => $value) {
-            return $mimes;
+        foreach (Config::get('site.upload_mimes', []) as $key => $mime_type) {
+            $mime_types[$key] = $mime_type;
         }
 
+        return $mime_types;
     }
 }
