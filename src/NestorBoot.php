@@ -11,7 +11,7 @@ class NestorBoot
     public function init()
     {
         // load all commands here from an external php file
-        $commands  = config('app.commands', []);
+        $commands  = Config::get('app.commands', []);
 
         $application = new \Symfony\Component\Console\Application();
 
