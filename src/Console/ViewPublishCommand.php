@@ -97,12 +97,24 @@ class ViewPublishCommand extends Command
 
         $section1->overwrite('');
 
-        if(copy($this->base_path . '/' . $file, ROOT_THEME_DIR . '/theme/views' . $file)) {
+        if($this->copy_with_dir($this->base_path . '/' . $file, ROOT_THEME_DIR . '/theme/views' . $file)) {
             $section1->writeln('<info>View successfully created in</info> : ' . ROOT_THEME_DIR . '/theme/views' . $file);
         } else {
             $section1->writeln('<error>Error occured</error>');
         }
 
         return Command::SUCCESS;
+    }
+
+    private function copy_with_dir($s1, $s2) {
+        $path = pathinfo($s2);
+        if (!file_exists($path['dirname'])) {
+            mkdir($path['dirname'], 0777, true);
+        }
+        if (!file_exists($path['dirname']) || !copy($s1, $s2)) {
+            return false;
+        }
+
+        return true;
     }
 }
