@@ -11,7 +11,7 @@
 </head>
 
 <body class="{{body_class}}" data-template="base.twig">
-    {% include 'header.twig' %}
+    {% include 'layout/base/header.twig' %}
 
     <div>
         {% block content %}
@@ -20,7 +20,7 @@
     </div>
 
     {% block footer %}
-        {% include 'footer.twig' %}
+        {% include 'layout/base/footer.twig' %}
         {{ function('wp_footer') }}
     {% endblock %}
 </body>
