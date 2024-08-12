@@ -9,6 +9,7 @@ class ACFSetup
     public function __construct()
     {
         BlockFinder::load();
+        OptionPage::load();
 
         //If we are in production, we doen't need to store fields in DB, so we deactivate sync
         if (!Helper::is_dev_env()) {
