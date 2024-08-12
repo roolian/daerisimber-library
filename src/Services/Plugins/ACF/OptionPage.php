@@ -29,15 +29,17 @@ class OptionPage
 
     public function add_options_to_context($context)
     {
-        $options = [];
 
         $optionsList = get_fields('option');
 
-        foreach ($optionsList as $key => $value) {
-            $options[$key] = $value;
-        }
+        if($optionsList) {
+            $options = [];
+            foreach ($optionsList as $key => $value) {
+                $options[$key] = $value;
+            }
 
-        $context['options'] = $options;
+            $context['options'] = $options;
+        }
 
         return $context;
     }
