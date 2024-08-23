@@ -21,6 +21,7 @@ class User
     public function set_roles_capabilities(): void
     {
         $editor = get_role('editor');
+        $editor->add_cap('edit_themes');
 
     }
 
