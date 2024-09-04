@@ -45,7 +45,7 @@ class Assets
 
     public function dequeue_default_assets()
     {
-        wp_dequeue_style('wp-block-library');
+        //wp_dequeue_style('wp-block-library');
         wp_dequeue_style('wp-block-library-theme');
         wp_dequeue_style('wp-block-style');
         wp_dequeue_script('jquery');
@@ -66,7 +66,7 @@ class Assets
 
     public function admin_enqueue_scripts()
     {
-        
+
     }
 
     public function enqueue_block_editor_assets()
