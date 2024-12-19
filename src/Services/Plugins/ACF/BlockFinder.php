@@ -40,7 +40,7 @@ class BlockFinder
     public function register_blocks()
     {
         foreach ($this->blocks as $slug => $blockJsonPath) {
-            
+
             $className = Helper::str_to_camel($slug) . 'BlockModel';
             $classPath = dirname($blockJsonPath) . '/' . $className . '.php';
 
@@ -50,9 +50,9 @@ class BlockFinder
                 }
                 //The class need to inherits BlockModel
                 $refl = new ReflectionClass($className);
-                $block_render = $refl->newInstanceArgs();
+                $block_render = $refl->newInstanceArgs([$blockJsonPath]);
             } else {
-                $block_render  = new BlockModel();
+                $block_render  = new BlockModel($blockJsonPath);
             }
 
             register_block_type($blockJsonPath, [

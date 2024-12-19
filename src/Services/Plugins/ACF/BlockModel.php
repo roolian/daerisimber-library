@@ -3,9 +3,13 @@
 namespace Daerisimber\Services\Plugins\ACF;
 
 use Timber\Timber;
+use DirectoryIterator;
+use Daerisimber\Services\Helper;
 
 class BlockModel
 {
+    public string $block_path;
+    public object $json_data;
     public array $block;
     public string $content;
     public bool $is_preview;
@@ -15,6 +19,24 @@ class BlockModel
     public array|false $fields;
     public string $name;
     public array $class;
+
+    public function __construct(string $blockJsonPath)
+    {
+        $this->block_path = dirname($blockJsonPath);
+        $json = file_get_contents($blockJsonPath);
+
+        // Check if the file was read successfully
+        if ($json !== false) {
+            $json_data = json_decode($json);
+            if ($json_data !== null) {
+                $this->json_data = $json_data;
+            }
+        }
+
+        // add_action('acf/include_fields', [$this, 'add_variant_field']);
+        $this->add_variant_field();
+
+    }
 
     /**
      * Render
@@ -44,7 +66,7 @@ class BlockModel
         $this->timber_context           = Timber::context();
         $this->timber_context['post']   = Timber::get_post();
         $this->timber_context['block']  = $block;
-        
+
         $this->timber_context['id'] = $this->get_container_id();
         $this->timber_context['fields'] = $this->fields;
         $this->timber_context['context'] = $context;
@@ -57,7 +79,6 @@ class BlockModel
         $template  = [$this->block['path'] . '/' . $this->name . '.twig', $this->block['path'] . '/index.twig'];
         Timber::render($template, $this->timber_context);
     }
-    
 
     public function generate_common_classes()
     {
@@ -70,7 +91,7 @@ class BlockModel
         }
 
         if (!empty($this->block['align'])) {
-            $this->add_class('align'.$this->block['align']);
+            $this->add_class('align' . $this->block['align']);
         }
     }
 
@@ -91,8 +112,86 @@ class BlockModel
 
     private function get_container_id()
     {
-        $id = $this->name.'-'.$this->block['id'];
+        $id = $this->name . '-' . $this->block['id'];
 
         return isset($this->block['anchor']) ? $this->block['anchor'] : $id;
+    }
+
+    public function get_variant_list()
+    {
+        $variant_list_choice = [];
+        $path = $this->block_path . '/views/variant/';
+
+        //Check without views folder
+        if (!is_dir($path)) {
+            $path = $this->block_path . '/variant/';
+        }
+
+        if (is_dir($path)) {
+
+            // directory to scan
+            $directory = new DirectoryIterator($path);
+
+            foreach ($directory as $fileinfo) {
+                // must be a file
+                if ($fileinfo->isFile()) {
+                    // file extension
+                    $extension = strtolower(pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION));
+                    // check if extension match
+                    if ($extension == 'twig') {
+                        // add to result
+                        $name = str_replace('.twig', '', $fileinfo->getFilename());
+                        $variant_list_choice[] = Helper::str_to_title($name);
+                    }
+                }
+            }
+        }
+
+        return $variant_list_choice;
+    }
+
+    public function add_variant_field()
+    {
+
+        $list = $this->get_variant_list();
+        if (empty($list)) {
+            return;
+        }
+        $key = substr($this->block_path, -10);
+        acf_add_local_field_group([
+            'modified' => null,
+            'key' => "group_var_{$key}",
+            'title' => 'Variante',
+            'fields' => [
+                [
+                    'key' => "field_var_{$key}",
+                    'label' => 'Variante',
+                    'name' => 'variant',
+                    'aria-label' => '',
+                    'type' => 'select',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'choices' => $this->get_variant_list(),
+                    'default_value' => false,
+                    'return_format' => 'array',
+                    'multiple' => 0,
+                    'allow_null' => 0,
+                    'ui' => 0,
+                    'ajax' => 0,
+                ],
+            ],
+            'active' => true,
+            'menu_order' => -1,
+            'location' => [
+                [
+                    [
+                        'param' => 'block',
+                        'operator' => '==',
+                        'value' =>  $this->json_data->name,
+                    ],
+                ],
+            ],
+        ]);
     }
 }
