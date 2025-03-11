@@ -22,6 +22,8 @@ class BlockModel
 
     public function __construct(string $blockJsonPath)
     {
+
+        $this->timber_context           = Timber::context();
         $this->block_path = dirname($blockJsonPath);
         $json = file_get_contents($blockJsonPath);
 
@@ -63,7 +65,6 @@ class BlockModel
 
         $this->generate_common_classes();
 
-        $this->timber_context           = Timber::context();
         $this->timber_context['post']   = Timber::get_post();
         $this->timber_context['block']  = $block;
 
@@ -129,6 +130,8 @@ class BlockModel
 
         if (is_dir($path)) {
 
+            $this->timber_context['variant_path'] = $path;
+
             // directory to scan
             $directory = new DirectoryIterator($path);
 
@@ -141,7 +144,7 @@ class BlockModel
                     if ($extension == 'twig') {
                         // add to result
                         $name = str_replace('.twig', '', $fileinfo->getFilename());
-                        $variant_list_choice[] = Helper::str_to_title($name);
+                        $variant_list_choice[$fileinfo->getFilename()] = Helper::str_to_title($name);
                     }
                 }
             }
@@ -174,7 +177,7 @@ class BlockModel
                     'conditional_logic' => 0,
                     'choices' => $this->get_variant_list(),
                     'default_value' => false,
-                    'return_format' => 'array',
+                    'return_format' => 'value',
                     'multiple' => 0,
                     'allow_null' => 0,
                     'ui' => 0,
