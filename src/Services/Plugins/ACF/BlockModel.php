@@ -15,7 +15,7 @@ class BlockModel
     public bool $is_preview;
     public int $post_id;
     public array $context;
-    public array $timber_context;
+    public array $timber_context = [];
     public array|false $fields;
     public string $name;
     public array $class;
@@ -23,7 +23,6 @@ class BlockModel
     public function __construct(string $blockJsonPath)
     {
 
-        $this->timber_context           = Timber::context();
         $this->block_path = dirname($blockJsonPath);
         $json = file_get_contents($blockJsonPath);
 
@@ -75,10 +74,12 @@ class BlockModel
         $this->timber_context['is_preview'] = $is_preview;
         $this->timber_context['class'] = $this->get_class();
 
+        $context = Timber::context();
+
         $this->before_render();
 
         $template  = [$this->block['path'] . '/' . $this->name . '.twig', $this->block['path'] . '/index.twig'];
-        Timber::render($template, $this->timber_context);
+        Timber::render($template, array_merge($context, $this->timber_context));
     }
 
     public function generate_common_classes()
