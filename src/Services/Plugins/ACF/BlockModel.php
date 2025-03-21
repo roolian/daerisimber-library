@@ -84,6 +84,7 @@ class BlockModel
 
     public function generate_common_classes()
     {
+        $this->class = [];
         $this->add_class($this->name);
 
         $this->add_class('wp-block-acf');
