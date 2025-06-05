@@ -9,7 +9,7 @@ class OptionPage
     use SingletonTrait;
     public function init()
     {
-        $this->register_options_page();
+        add_action('acf/init', [$this, 'register_options_page'], 1);
         add_filter('acf/json/save_file_name', [$this, 'set_json_save_filename'], 10, 3);
         add_filter('timber/context', [$this, 'add_options_to_context'], 1);
 
