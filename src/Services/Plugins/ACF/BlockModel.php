@@ -36,7 +36,15 @@ class BlockModel
 
         // add_action('acf/include_fields', [$this, 'add_variant_field']);
         $this->add_variant_field();
+        $this->custom_construct();
 
+    }
+    /**
+     * Custom construct method to be overridden in child classes.
+     */
+    public function custom_construct()
+    {
+        // To be overridden in child classes
     }
 
     /**
