@@ -18,9 +18,19 @@ class ACFSetup
 
         //When we edit a groupfield in Admin, a json file is created
         add_filter('acf/prepare_field_group_for_export', [$this,'prepare_field_group_for_export'], 20, 1);
+
+        //When we save a block, we add the ID to the ACF block
+        add_filter('acf/pre_save_block', [$this, 'add_id_to_acf_blocks']);
     }
 
-    
+    public function add_id_to_acf_blocks($attributes)
+    {
+        if (empty($attributes['id'])) {
+            $attributes['id'] = uniqid('block_');
+        }
+
+        return $attributes;
+    }
 
     //Move modified property in top of files
     public function prepare_field_group_for_export($group)
@@ -35,8 +45,5 @@ class ACFSetup
         $group['private'] = true;
         return $group;
     }
-
-
-
 
 }

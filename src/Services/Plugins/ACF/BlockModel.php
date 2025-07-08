@@ -207,4 +207,50 @@ class BlockModel
             ],
         ]);
     }
+
+    public static function get_fields_from_page(string $blockId, int $postId, $fields = false)
+    {
+        $post = get_post($postId);
+
+        if (! $post) {
+            return false;
+        }
+
+        $blocks = parse_blocks($post->post_content);
+
+        if ($blocks) {
+            $iterator = new \RecursiveArrayIterator($blocks);
+            $recursive = new \RecursiveIteratorIterator(
+                $iterator,
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            foreach ($recursive as $key => $value) {
+                if (isset($value['attrs'], $value['attrs']['id'], $value['attrs']['data'])) {
+                    if ($value['attrs']['id'] === $blockId) {
+                        acf_setup_meta($value['attrs']['data'], $value['attrs']['id'], true);
+                        if (! $fields) {
+                            $returnedFields = get_fields();
+                        }
+
+                        if (is_array($fields)) {
+                            $returnedFields = [];
+                            foreach ($fields as $key) {
+                                $returnedFields[$key] = get_field($key);
+                            }
+                        } else {
+                            $returnedFields = get_field($fields);
+                        }
+
+                        acf_reset_meta($value['attrs']['id']);
+
+                        //return $value['attrs']['data'];
+                        return $returnedFields;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }
