@@ -16,17 +16,27 @@ class BlockFinder
     public array $block_categories = [
         'daeris' =>  'Daeris',
         'drs_layout' =>  'Layout',
-        'drs_interaction' =>  'Interaction',
+        'drs_component' =>  'Component',
+        'drs_query' =>  'Query',
     ] ;
 
     public string $block_folder_path = '/blocks';
+    public string $module_folder_path = '/modules';
 
     public function init()
     {
-        //Find blocks in block folder
-        $root_blocks = $this->find_all_blocks(get_template_directory() . $this->block_folder_path);
-        //Find blocks in modules folder
-        $modules_blocks = $this->find_all_blocks(get_template_directory() . '/modules');
+        $root_directory = get_template_directory() . $this->block_folder_path;
+        if (!is_dir($root_directory)) {
+            $root_directory = get_template_directory() . '/src' . $this->block_folder_path;
+        }
+
+        $modules_directory = get_template_directory() . $this->module_folder_path;
+        if (!is_dir($modules_directory)) {
+            $modules_directory = get_template_directory() . '/src' . $this->module_folder_path;
+        }
+
+        $root_blocks = $this->find_all_blocks($root_directory);
+        $modules_blocks = $this->find_blocks_from_active_modules($modules_directory);
 
         $this->blocks = array_merge($root_blocks, $modules_blocks);
 
@@ -40,12 +50,11 @@ class BlockFinder
     public function register_blocks()
     {
         foreach ($this->blocks as $slug => $blockJsonPath) {
-
             $className = Helper::str_to_camel($slug) . 'BlockModel';
             $classPath = dirname($blockJsonPath) . '/' . $className . '.php';
 
-            if(file_exists($classPath)) {
-                if(!class_exists($className)) {
+            if (file_exists($classPath)) {
+                if (!class_exists($className)) {
                     include $classPath;
                 }
                 //The class need to inherits BlockModel
@@ -89,7 +98,7 @@ class BlockFinder
     public function set_json_save_paths(array $paths, array $post): array
     {
         //If not in dev, we don't save json file
-        if(!in_array(WP_ENV, ['development', 'local'])) {
+        if (!in_array(WP_ENV, ['development', 'local'])) {
             return [];
         }
 
@@ -126,6 +135,59 @@ class BlockFinder
         foreach (self::filesIn($blocks_directory) as $file) {
             $temp_blocks[$file->getPathInfo()->getBasename()] = $file->getPathname();
             //$this->load_paths[] = $file->getPathInfo()->getRealPath();
+        }
+
+        asort($temp_blocks);
+
+        return $temp_blocks;
+    }
+
+    /**
+     * Find blocks only from active modules
+     *
+     * @param string $modules_directory
+     * @return array
+     */
+    private function find_blocks_from_active_modules(string $modules_directory): array
+    {
+        $temp_blocks = [];
+
+        if (!is_dir($modules_directory)) {
+            return $temp_blocks;
+        }
+
+        // Get active modules from config
+        $config = require get_template_directory() . '/src/config/app.php';
+        $active_modules = $config['modules'] ?? [];
+
+        // Extract module class names from the active modules list
+        $active_module_names = array_map(function ($module_class) {
+            // Extract module name from class name
+            // e.g., Theme\Modules\Faq\FaqModule => Faq
+            $parts = explode('\\', $module_class);
+            return $parts[count($parts) - 2] ?? null;
+        }, $active_modules);
+
+        // Filter out null values
+        $active_module_names = array_filter($active_module_names);
+
+        // Iterate through each module directory
+        $module_dirs = glob($modules_directory . '/*', GLOB_ONLYDIR);
+
+        foreach ($module_dirs as $module_dir) {
+            $module_name = basename($module_dir);
+
+            // Only include blocks from active modules
+            if (in_array($module_name, $active_module_names)) {
+                $blocks_dir = $module_dir . '/blocks';
+
+                if (is_dir($blocks_dir)) {
+                    /** @var \SplFileInfo $file */
+                    foreach (self::filesIn($blocks_dir) as $file) {
+                        $temp_blocks[$file->getPathInfo()->getBasename()] = $file->getPathname();
+                    }
+                }
+            }
         }
 
         asort($temp_blocks);

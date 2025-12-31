@@ -28,7 +28,7 @@ class Boot
     public static function load_timber()
     {
         Timber::init();
-        Timber::$dirname    = ['views', 'blocks', 'modules'];
+        Timber::$dirname    = ['views', 'blocks', 'modules','src/views', 'src/blocks', 'src/modules'];
     }
     public static function load_services()
     {

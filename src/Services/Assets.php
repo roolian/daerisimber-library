@@ -27,6 +27,10 @@ class Assets
 
         $this->dist_uri = get_template_directory_uri() . '/assets/dist';
         $this->dist_path = get_template_directory() . '/assets/dist';
+        if(!is_dir($this->dist_path)) {
+            $this->dist_uri = get_template_directory_uri() . '/src/assets/dist';
+            $this->dist_path = get_template_directory() . '/src/assets/dist';   
+        }
 
         add_action('enqueue_block_editor_assets', [$this, 'dequeue_default_assets']);
         add_action('wp_enqueue_scripts', [$this, 'dequeue_default_assets']);
