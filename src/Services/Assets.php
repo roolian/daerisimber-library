@@ -27,9 +27,9 @@ class Assets
 
         $this->dist_uri = get_template_directory_uri() . '/assets/dist';
         $this->dist_path = get_template_directory() . '/assets/dist';
-        if(!is_dir($this->dist_path)) {
+        if (!is_dir($this->dist_path)) {
             $this->dist_uri = get_template_directory_uri() . '/src/assets/dist';
-            $this->dist_path = get_template_directory() . '/src/assets/dist';   
+            $this->dist_path = get_template_directory() . '/src/assets/dist';
         }
 
         add_action('enqueue_block_editor_assets', [$this, 'dequeue_default_assets']);
@@ -37,7 +37,7 @@ class Assets
 
         if (is_admin()) {
             add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
-            add_action('enqueue_block_editor_assets', [$this, 'enqueue_block_editor_assets']);
+            add_action('enqueue_block_assets', [$this, 'enqueue_block_assets']);
         } else {
             if ($this->env === 'development') {
                 add_action('wp_head', [$this,'enqueue_dev_assets']);
@@ -70,14 +70,19 @@ class Assets
 
     public function admin_enqueue_scripts()
     {
-
     }
 
-    public function enqueue_block_editor_assets()
+    public function enqueue_block_assets()
     {
+        $isEditor = apply_filters('should_load_block_editor_scripts_and_styles', true);
         //wp_deregister_style('wp-reset-editor-styles');
-        wp_enqueue_style('editor', $this->get_editor_style());
-        wp_enqueue_script('main', $this->get_main_script(), [], '', ['strategy'  => 'defer', 'in_footer' => true, ]);
+        if ($isEditor) {
+            // This is the admin/editor page context
+        } else {
+            // This is the iframe context
+            wp_enqueue_style('editor', $this->get_editor_style());
+            wp_enqueue_script('main', $this->get_main_script(), [], '', ['strategy'  => 'defer', 'in_footer' => true, ]);
+        }
     }
 
     public function get_main_script(): string|false
@@ -91,7 +96,6 @@ class Assets
     public function get_editor_style(): string|false
     {
         return $this->get_url_from_manifest($this->file_editor_css, 'file');
-
     }
 
     private function get_url_from_manifest(string $resource, string $data)
@@ -99,11 +103,10 @@ class Assets
         $path = Config::get('vite.manifest', [$resource => [$data => false]])[$resource][$data];
 
         //If data is css array from manifest
-        if(is_array($path)) {
+        if (is_array($path)) {
             $path = $path[0];
         }
 
         return $path ? "$this->dist_uri/$path" : false;
     }
-
 }

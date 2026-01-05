@@ -8,7 +8,7 @@ use Daerisimber\Config;
 
 class Site extends TimberSite
 {
-    public Array $menus = [];
+    public array $menus = [];
     public function __construct()
     {
         $this->menus = Config::get('site.menus', []);
@@ -45,7 +45,7 @@ class Site extends TimberSite
     public function theme_supports()
     {
         foreach (Config::get('site.themes_supports', []) as $key => $value) {
-            if(!$value) {
+            if (!$value) {
                 continue;
             }
             if (is_bool($value)) {
@@ -54,7 +54,6 @@ class Site extends TimberSite
                 add_theme_support($key, $value);
             }
         }
-
     }
 
     public function allow_file_type_upload($mime_types)
