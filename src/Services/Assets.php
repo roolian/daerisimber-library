@@ -11,6 +11,7 @@ class Assets
     public string $dist_uri;
     public string $dist_path;
     public string $file_main_js;
+    public string $file_admin_js;
     public string $file_editor_css;
     public ?array $manifest  = null;
 
@@ -21,6 +22,7 @@ class Assets
         $this->env =                Config::get('vite.environment', 'production');
         $this->hmr_host =           'http://' . Config::get('vite.server.hmr.host') . ':' . Config::get('vite.server.port');
         $this->file_main_js =       Config::getRelativePath('vite.entries.main');
+        $this->file_admin_js =       Config::getRelativePath('vite.entries.admin');
         $this->file_editor_css =    Config::getRelativePath('vite.entries.editor');
 
         $this->manifest =           Config::get('vite.manifest', null);
@@ -28,8 +30,8 @@ class Assets
         $this->dist_uri = get_template_directory_uri() . '/assets/dist';
         $this->dist_path = get_template_directory() . '/assets/dist';
         if (!is_dir($this->dist_path)) {
-            $this->dist_uri = get_template_directory_uri() . '/src/assets/dist';
-            $this->dist_path = get_template_directory() . '/src/assets/dist';
+            $this->dist_uri = get_template_directory_uri() . '/' . Config::getRelativePath('vite.dest');
+            $this->dist_path = get_template_directory() . '/' . Config::getRelativePath('vite.dest');
         }
 
         add_action('enqueue_block_editor_assets', [$this, 'dequeue_default_assets']);
@@ -63,13 +65,15 @@ class Assets
 
     public function enqueue_prod_assets()
     {
-        wp_enqueue_style('main', $this->get_main_style());
-        wp_enqueue_script('main', $this->get_main_script(), [], '', ['strategy'  => 'defer', 'in_footer' => true, ]);
+        wp_enqueue_style('drs_main_style', $this->get_main_style());
+        wp_enqueue_script('drs_main', $this->get_main_script(), [], '', ['strategy'  => 'defer', 'in_footer' => true, ]);
         // wp_enqueue_style('prefix-editor-font', '//fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
     }
 
     public function admin_enqueue_scripts()
     {
+        
+        wp_enqueue_script('drs_admin', $this->get_admin_script(), [], '', ['in_footer' => true, ]);
     }
 
     public function enqueue_block_assets()
@@ -88,6 +92,10 @@ class Assets
     public function get_main_script(): string|false
     {
         return $this->get_url_from_manifest($this->file_main_js, 'file');
+    }
+    public function get_admin_script(): string|false
+    {
+        return $this->get_url_from_manifest($this->file_admin_js, 'file');
     }
     public function get_main_style(): string|false
     {
