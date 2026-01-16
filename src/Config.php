@@ -13,12 +13,11 @@ class Config
 
     public function init()
     {
-        if(file_exists(ROOT_THEME_DIR . '/src/config/app.php')) {
-            $this->config_data = ConfigManager::fromDirectory(ROOT_THEME_DIR . '/src/config/');    
+        if (file_exists(ROOT_THEME_DIR . '/src/config/app.php')) {
+            $this->config_data = ConfigManager::fromDirectory(ROOT_THEME_DIR . '/src/config/');
         } else {
             //old version
-            $this->config_data = ConfigManager::fromDirectory(ROOT_THEME_DIR . '/theme/config/');    
-
+            $this->config_data = ConfigManager::fromDirectory(ROOT_THEME_DIR . '/theme/config/');
         }
         $this->config_data->load(ROOT_THEME_DIR . '/vite.json', 'vite');
 
@@ -28,12 +27,12 @@ class Config
         }
     }
 
-    public static function get($key, $default = null)
+    public static function get($key, $default = '')
     {
         return self::instance()->config_data->get($key, $default);
     }
 
-    public static function getRelativePath($key, $default = null)
+    public static function getRelativePath($key, $default = '')
     {
         return ltrim(self::get($key, $default), './');
     }
@@ -42,5 +41,4 @@ class Config
     {
         return self::instance()->config_data->set($key, $value);
     }
-
 }

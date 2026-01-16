@@ -3,6 +3,7 @@
 namespace Daerisimber\Services\Plugins\ACF;
 
 use ReflectionClass;
+use Daerisimber\Config;
 use Daerisimber\Services\Helper;
 use Daerisimber\Utils\Traits\SingletonTrait;
 
@@ -157,8 +158,7 @@ class BlockFinder
         }
 
         // Get active modules from config
-        $config = require get_template_directory() . '/src/config/app.php';
-        $active_modules = $config['modules'] ?? [];
+        $active_modules = Config::get('app.modules') ?? [];
 
         // Extract module class names from the active modules list
         $active_module_names = array_map(function ($module_class) {
