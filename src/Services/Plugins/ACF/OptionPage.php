@@ -12,7 +12,6 @@ class OptionPage
         add_action('acf/init', [$this, 'register_options_page'], 1);
         add_filter('acf/json/save_file_name', [$this, 'set_json_save_filename'], 10, 3);
         add_filter('timber/context', [$this, 'add_options_to_context'], 1);
-
     }
 
     public function register_options_page()
@@ -24,15 +23,13 @@ class OptionPage
             'capability' => 'edit_posts',
             'redirect' => false,
         ]);
-
     }
 
     public function add_options_to_context($context)
     {
-
         $optionsList = get_fields('option');
 
-        if($optionsList) {
+        if ($optionsList) {
             $options = [];
             foreach ($optionsList as $key => $value) {
                 $options[$key] = $value;
@@ -65,5 +62,4 @@ class OptionPage
 
         return $filename;
     }
-
 }

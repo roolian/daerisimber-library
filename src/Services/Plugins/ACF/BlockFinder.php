@@ -99,7 +99,7 @@ class BlockFinder
     public function set_json_save_paths(array $paths, array $post): array
     {
         //If not in dev, we don't save json file
-        if (!in_array(WP_ENV, ['development', 'local'])) {
+        if (!Helper::is_dev_env()) {
             return [];
         }
 

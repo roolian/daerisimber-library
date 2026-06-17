@@ -45,5 +45,4 @@ class ACFSetup
         $group['private'] = true;
         return $group;
     }
-
 }
