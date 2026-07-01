@@ -13,6 +13,7 @@ class BlockModel
     public array $block;
     public string $content;
     public bool $is_preview;
+    public bool $is_thumbnail = false;
     public int $post_id;
     public array $context;
     public array $timber_context = [];
@@ -22,22 +23,26 @@ class BlockModel
 
     public function __construct(string $blockJsonPath)
     {
-
         $this->block_path = dirname($blockJsonPath);
         $json = file_get_contents($blockJsonPath);
 
-        // Check if the file was read successfully
-        if ($json !== false) {
-            $json_data = json_decode($json);
-            if ($json_data !== null) {
-                $this->json_data = $json_data;
-            }
+        if ($json === false) {
+            throw new \RuntimeException("Could not read block.json file: {$blockJsonPath}");
         }
+
+        $json_data = json_decode($json);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException(
+                "Invalid JSON format in {$blockJsonPath}: " . json_last_error_msg()
+            );
+        }
+
+        $this->json_data = $json_data;
 
         // add_action('acf/include_fields', [$this, 'add_variant_field']);
         $this->add_variant_field();
         $this->custom_construct();
-
     }
     /**
      * Custom construct method to be overridden in child classes.
@@ -68,6 +73,7 @@ class BlockModel
 
         if (!$this->fields) {
             $this->fields = $block['data'];
+            $this->is_thumbnail = true;
         }
 
         $this->generate_common_classes();
@@ -80,6 +86,7 @@ class BlockModel
         $this->timber_context['context'] = $context;
         $this->timber_context['post_id'] = $post_id;
         $this->timber_context['is_preview'] = $is_preview;
+        $this->timber_context['is_thumbnail'] = $this->is_thumbnail;
         $this->timber_context['class'] = $this->get_class();
 
         $context = Timber::context();
@@ -139,7 +146,6 @@ class BlockModel
         }
 
         if (is_dir($path)) {
-
             $this->timber_context['variant_path'] = $path;
 
             // directory to scan
@@ -165,7 +171,6 @@ class BlockModel
 
     public function add_variant_field()
     {
-
         $list = $this->get_variant_list();
         if (empty($list)) {
             return;
