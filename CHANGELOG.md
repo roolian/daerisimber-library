@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2026-11-04
+
+### Added
+- Mobile menu in base header layout
+- `site.blocks_blacklist` config to remove block types from the editor
+- `site.themes_remove_supports` config to remove theme supports
+- `site.should_load_remote_block_patterns` config
+- `is_thumbnail` flag in block context when rendering block previews
+
+### Changed
+- BlockModel throws an exception when block.json is unreadable or invalid
+
 ## [1.2.2]
 
 ### Added
