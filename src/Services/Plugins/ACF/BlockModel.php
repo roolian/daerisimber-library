@@ -60,14 +60,15 @@ class BlockModel
      * @param    bool     $is_preview Whether or not the block is being rendered for editing preview.
      * @param    int      $post_id The current post being edited or viewed.
      * @param    \WP_Block $wp_block The block instance (since WP 5.5).
+     * @param    array|false $context The block context, false when ACF has none.
      */
-    public function render(array $block, string $content, bool $is_preview, int $post_id, \WP_Block $wp_block = null, array $context)
+    public function render(array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?\WP_Block $wp_block = null, array|false $context = [])
     {
         $this->block = $block;
         $this->content = $content;
         $this->is_preview = $is_preview;
         $this->post_id = $post_id;
-        $this->context = $context;
+        $this->context = $context ?: [];
         $this->fields = get_fields();
         $this->name = explode('/', $block['name'])[1];
 
@@ -83,7 +84,7 @@ class BlockModel
 
         $this->timber_context['id'] = $this->get_container_id();
         $this->timber_context['fields'] = $this->fields;
-        $this->timber_context['context'] = $context;
+        $this->timber_context['context'] = $this->context;
         $this->timber_context['post_id'] = $post_id;
         $this->timber_context['is_preview'] = $is_preview;
         $this->timber_context['is_thumbnail'] = $this->is_thumbnail;
