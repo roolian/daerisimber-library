@@ -7,7 +7,7 @@
         "phlak/config": "^8.0 || ^10.0"
     },
     "require-dev": {
-        "hellonico/timber-dump-extension": "^2.0",
+        "hellonico/timber-dump-extension": "^3.0",
         "symfony/console": "^6.4"
     },
     "license": "MIT",
