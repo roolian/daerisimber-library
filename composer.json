@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "timber/timber": "^2.2",
-        "phlak/config": "^8.0"
+        "phlak/config": "^8.0 || ^10.0"
     },
     "require-dev": {
         "hellonico/timber-dump-extension": "^2.0",
